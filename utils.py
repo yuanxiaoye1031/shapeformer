@@ -5,6 +5,7 @@ import numpy as np
 import logging
 import zipfile
 import requests
+import random
 from datetime import datetime
 from torch.utils.data import Dataset
 
@@ -64,6 +65,8 @@ def create_dirs(dirs):
 def Initialization(config):
     if config['seed'] is not None:
         torch.manual_seed(config['seed'])
+        random.seed(config['seed'])
+        np.random.seed(config['seed'])
     device = torch.device(f"cuda:{config['gpu']}" if (torch.cuda.is_available() and config['gpu'] != '-1') else 'cpu')
     logger.info("Using device: {}".format(device))
     return device

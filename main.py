@@ -79,6 +79,8 @@ parser.add_argument('--gpu', type=int, default='0', help='GPU index, -1 for CPU'
 parser.add_argument('--console', action='store_true', help="Optimize printout for console output; otherwise for file")
 parser.add_argument('--seed', default=1, type=int, help='Seed used for splitting sets')
 
+parser.add_argument("--store_path", default='store/', type=str, help='store path of .pkl files')
+
 args = parser.parse_args()
 
 
@@ -106,7 +108,7 @@ if __name__ == '__main__':
         # -------------------------------------------- Shapelet Discovery ----------------------------------------------
         shapelet_discovery = ShapeletDiscover(window_size=args.window_size, num_pip=args.num_pip,
                                               processes=args.processes, len_of_ts=len_ts, dim=dim)
-        sc_path = "store/" + problem + "_" + str(args.window_size) + ".pkl"
+        sc_path = os.path.join(config['store_path'], problem + "_" + str(args.window_size) + ".pkl")
         if args.pre_shapelet_discovery == 1:
             shapelet_discovery.load_shapelet_candidates(path=sc_path)
         else:

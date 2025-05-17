@@ -5,6 +5,7 @@ import logging
 from utils import Setup, Initialization, Data_Loader, Data_Verifier
 from Shapelet.mul_shapelet_discovery import ShapeletDiscover
 import pickle
+import numpy as np
 
 def warn(*args, **kwargs):
     pass
@@ -32,6 +33,7 @@ parser.add_argument("--dataset_pos", default=1, type=int, help="number of proces
 
 parser.add_argument("--is_extract_candidate", default=1, type=int, help="is extract candidate?")
 parser.add_argument("--dis_flag", default=1, type=int, help="is extract candidate?")
+parser.add_argument("--store_path", default='store/', type=str, help='store path of .pkl files')
 args = parser.parse_args()
 
 if __name__ == '__main__':
@@ -51,8 +53,8 @@ if __name__ == '__main__':
         train_data = Data['train_data']
         train_label = Data['train_label']
         len_ts = Data['max_len']
-        print("len_ts: %s" % len_ts)
-        print("dim: %s" % train_data.shape[1])
+        logger.info("len_ts: %s" % len_ts)
+        logger.info("dim: %s" % train_data.shape[1])
         dim = train_data.shape[1]
 
         # --------------------------------------------------------------------------------------------------------------
@@ -60,35 +62,42 @@ if __name__ == '__main__':
         if config['is_extract_candidate']:
             shapelet_discovery = ShapeletDiscover(window_size=args.window_size, num_pip=args.num_pip,
                                                   processes=args.processes, len_of_ts=len_ts, dim=dim)
-            print("extract_candidate...")
+            logger.info("extract_candidate...")
             shapelet_discovery.extract_candidate(train_data=train_data)
-            sc_path = "store/" + problem + "_sd.pkl"
-            file = open(sc_path, 'wb')
-            pickle.dump(shapelet_discovery, file)
-            file.close()
+            
+            sc_path = os.path.join(config['store_path'], problem + "_sd.pkl")
+            logger.info(f"saving shapelet candidates to: {sc_path}")
+            with open(sc_path, 'wb') as f:
+                pickle.dump(shapelet_discovery, f, protocol=pickle.HIGHEST_PROTOCOL)
+            logger.info("save shapelet candidates done!")
+            
+            ci_path = os.path.join(config['store_path'], problem + "_train_data_ci")
+            logger.info(f"saving train data ci to: {ci_path}")
+            np.save(ci_path, shapelet_discovery.train_data_ci)
+            logger.info("save train data ci done!")
         else:
-            sc_path = "store/" + problem + "_sd.pkl"
-            file = open(sc_path, 'rb')
-            shapelet_discovery = pickle.load(file)
-            file.close()
+            sc_path = os.path.join(config['store_path'], problem + "_sd.pkl")
+            logger.info(f"loading shapelet candidates from: {sc_path}")
+            with open(sc_path, 'rb') as f:
+                shapelet_discovery = pickle.load(f)
 
         if args.window_size <= int(len_ts / 2):
-            print("window_size:%s" % args.window_size)
+            logger.info("window_size:%s" % args.window_size)
             config['window_size'] = args.window_size
 
-            sc_path = "store/" + problem + "_" + str(args.window_size) + ".pkl"
+            sc_path = os.path.join(config['store_path'], problem + "_" + str(args.window_size) + ".pkl")
             shapelet_discovery.set_window_size(args.window_size)
-            print("discovery...")
+            logger.info("discovery...")
             shapelet_discovery.discovery(train_data=train_data, train_labels=train_label, flag=config['dis_flag'])
-            print("save_shapelet_candidates...")
+            logger.info("save_shapelet_candidates...")
             shapelet_discovery.save_shapelet_candidates(path=sc_path)
         else:
-            print("window_size < len_ts/2")
+            logger.info("window_size < len_ts/2")
             config['window_size'] = int(len_ts/2)
             args.window_size = int(len_ts/2)
-            sc_path = "store/" + problem + "_" + str(args.window_size) + ".pkl"
+            sc_path = os.path.join(config['store_path'], problem + "_" + str(args.window_size) + ".pkl")
             shapelet_discovery.set_window_size(args.window_size)
-            print("discovery...")
+            logger.info("discovery...")
             shapelet_discovery.discovery(train_data=train_data, train_labels=train_label, flag=config['dis_flag'])
-            print("save_shapelet_candidates...")
+            logger.info("save_shapelet_candidates...")
             shapelet_discovery.save_shapelet_candidates(path=sc_path)

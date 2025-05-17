@@ -152,7 +152,7 @@ class Shapeformer(nn.Module):
         # Global Information
         self.shape_blocks = nn.ModuleList([
             ShapeBlock(shapelet_info=self.shapelet_info[i], shapelet=self.shapelets[i],
-                       shape_embed_dim=config['shape_embed_dim'], len_ts=config["len_ts"])
+                       shape_embed_dim=config['shape_embed_dim'], len_ts=config["len_ts"], window_size=config['window_size'])
             for i in range(len(self.shapelet_info))])
 
         self.shapelet_info = config['shapelets_info']
@@ -249,10 +249,4 @@ def position_embedding(position_list):
     identity_matrix = torch.eye(int(max_d))
     d_position = identity_matrix[position_list.to(dtype=torch.long)]
     return d_position
-
-
-if __name__ == '__main__':
-    print()
-
-
 

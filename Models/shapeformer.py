@@ -80,7 +80,7 @@ class ShapeBlock(nn.Module):
         # soft-minimum
         index = torch.argmin(dist1, dim=1)
         pis = pis.view(x.size(0), -1, self.kernel_size)
-        out = pis[torch.arange(int(x.size(0))).to(torch.long).cuda(), index.to(torch.long)]
+        out = pis[torch.arange(int(x.size(0))).to(torch.long).cuda(x.device), index.to(torch.long)]
         out = self.l1(out)
 
         out_s = self.l2(self.shapelet.unsqueeze(0))

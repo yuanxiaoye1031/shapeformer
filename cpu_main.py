@@ -82,3 +82,13 @@ if __name__ == '__main__':
             shapelet_discovery.discovery(train_data=train_data, train_labels=train_label, flag=config['dis_flag'])
             print("save_shapelet_candidates...")
             shapelet_discovery.save_shapelet_candidates(path=sc_path)
+        else:
+            print("window_size < len_ts/2")
+            config['window_size'] = int(len_ts/2)
+            args.window_size = int(len_ts/2)
+            sc_path = "store/" + problem + "_" + str(args.window_size) + ".pkl"
+            shapelet_discovery.set_window_size(args.window_size)
+            print("discovery...")
+            shapelet_discovery.discovery(train_data=train_data, train_labels=train_label, flag=config['dis_flag'])
+            print("save_shapelet_candidates...")
+            shapelet_discovery.save_shapelet_candidates(path=sc_path)

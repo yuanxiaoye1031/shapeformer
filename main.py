@@ -43,8 +43,8 @@ parser.add_argument("--window_size", default=100, type=int, help="window size")
 parser.add_argument('--Net_Type', default=['Shapeformer'], choices={'T', 'C-T', 'PPSN', 'Shapeformer'})
 # Local Information
 parser.add_argument("--len_w", default=64, type=float, help="window size")
-parser.add_argument("--local_embed_dim", default=48, type=int, help="embedding dimension of shape")
-parser.add_argument("--local_pos_dim", default=48, type=int, help="embedding dimension of pos")
+parser.add_argument("--local_embed_dim", default=32, type=int, help="embedding dimension of shape")
+parser.add_argument("--local_pos_dim", default=32, type=int, help="embedding dimension of pos")
 
 # Global Information
 parser.add_argument("--num_pip", default=0.2, type=float, help="number of pips")
@@ -57,8 +57,8 @@ parser.add_argument("--pre_shapelet_discovery", default=1, type=int, help="numbe
 # Transformers Parameters ------------------------------
 parser.add_argument('--emb_size', type=int, default=64, help='Internal dimension of transformer embeddings')
 parser.add_argument('--dim_ff', type=int, default=256, help='Dimension of dense feedforward part of transformer layer')
-parser.add_argument('--num_heads', type=int, default=4, help='Number of multi-headed attention heads')
-parser.add_argument('--local_num_heads', type=int, default=4, help='Number of multi-headed attention heads')
+parser.add_argument('--num_heads', type=int, default=16, help='Number of multi-headed attention heads')
+parser.add_argument('--local_num_heads', type=int, default=16, help='Number of multi-headed attention heads')
 parser.add_argument('--Fix_pos_encode', choices={'tAPE', 'Learn', 'None'}, default='Learn',
                     help='Fix Position Embedding')
 parser.add_argument('--Rel_pos_encode', choices={'eRPE', 'Vector', 'None'}, default='eRPE',
@@ -67,8 +67,8 @@ parser.add_argument('--dropout', type=float, default=0.4, help='Droupout regular
 
 # Training Parameters/ Hyper-Parameters ----------------
 parser.add_argument('--epochs', type=int, default=200, help='Number of training epochs')
-parser.add_argument('--batch_size', type=int, default=8, help='Training batch size')
-parser.add_argument('--lr', type=float, default=5e-2, help='learning rate')
+parser.add_argument('--batch_size', type=int, default=16, help='Training batch size')
+parser.add_argument('--lr', type=float, default=0.01, help='learning rate')
 parser.add_argument('--weight_decay', type=float, default=5e-4, help='learning rate')
 parser.add_argument('--val_interval', type=int, default=1, help='Evaluate on validation every XX epochs. Must be >= 1')
 parser.add_argument('--key_metric', choices={'loss', 'accuracy', 'precision'}, default='accuracy',

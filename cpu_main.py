@@ -19,14 +19,14 @@ parser.add_argument('--data_path', default='Dataset/UEA/', choices={'Dataset/UEA
 parser.add_argument('--output_dir', default='Results',
                     help='Root output directory. Must exist. Time-stamped directories will be created inside.')
 parser.add_argument('--Norm', type=bool, default=False, help='Data Normalization')
-parser.add_argument('--val_ratio', type=float, default=0.5, help="Proportion of the train-set to be used as validation")
+parser.add_argument('--val_ratio', type=float, default=0.2, help="Proportion of the train-set to be used as validation")
 parser.add_argument('--print_interval', type=int, default=10, help='Print batch info every this many batches')
 
 parser.add_argument('--gpu', type=int, default='0', help='GPU index, -1 for CPU')
 parser.add_argument('--seed', default=1234, type=int, help='Seed used for splitting sets')
 
-parser.add_argument("--window_size", default=100, type=float, help="window size")
-parser.add_argument("--num_pip", default=0.5, type=float, help="number of pips")
+parser.add_argument("--window_size", default=100, type=int, help="window size")
+parser.add_argument("--num_pip", default=0.2, type=float, help="number of pips")
 parser.add_argument("--processes", default=1, type=int, help="number of processes for extracting shapelets")
 parser.add_argument("--dataset_pos", default=1, type=int, help="number of processes for extracting shapelets")
 
